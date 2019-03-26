@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use Auth;
 use App\User;
+use App\Mail\VerifedMail;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -51,7 +52,7 @@ class SignUpController extends Controller {
         } else {
             $email = $req->email;
             $password = bcrypt($req->password);
-            $token = Str::random(60);
+            $token = str_random(60);
 
             if( count(Mail::failures()) > 0 ) {
               return response()->json(array(
@@ -61,18 +62,39 @@ class SignUpController extends Controller {
             }
 
             else {
-              $user = User::create([
-                    'email' => $email,
-                    'password'  => $password,
-                    'role'      => 1,
-                    'auth_key' => $token,
-                ]);
+                $code = new \stdClass();
+                $code->confrim = $token;
+                $code->email = $req->email;
 
-              return response()->json(array(
-                'success' => true,
-                'message' => 'Akun telah dibuat. Silahkan login',
-              ));
+                Mail::to($req->email)->send(new VerifedMail($code));
+
+                $user = User::create([
+                      'username' => $req->username,
+                      'email' => $email,
+                      'password'  => $password,
+                      'role'      => 0,
+                      'auth_key' => $token,
+                  ]);
+
+                return response()->json(array(
+                  'success' => true,
+                  'message' => 'Akun telah dibuat. Silahkan login',
+                ));
           }
+        }
+    }
+
+    public function verifyUser($token, Request $req){
+        $user = User::where('auth_key', $token)->where('email', $req->email)->first();
+        if ($user){
+            $user->confirmed = 1;
+            $user->save();
+            return redirect('/l4s0k');
+        } else {
+            return response()->json([
+                'error' => true,
+                'message' => 'token tidak valid'
+            ]);
         }
     }
     //

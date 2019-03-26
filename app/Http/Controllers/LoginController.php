@@ -29,26 +29,17 @@ class LoginController extends Controller{
             $user = User::where('email', $req->email)->first();
             if (!empty($user)){
                 if (Hash::check($req->password, $user->password)){
-                    if ($req->role == 0){
+                    if ($req->role == 3){
                         Auth::guard('admin')->attempt(['email' => $req->email, 'password' => $req->password], $req->has('remember'));
                         // return response()->json(array(
                         //     'fails'     => false,
                         //     'redirect'  => route('admin.dashboard')
                         // ));
                         return redirect()->action('AdminController@index');
-                    }else if ($req->role == 1){
-                        $this->guard()->attempt([
-                            'email'     => $req->email,
-                            'password'  => $req->password
-                        ], $req->has('remember'));
-                        return response()->json(array(
-                            'fails'     => false,
-                            'message'   => 'anda masuk halaman user biasa'
-                        ));
                     } else {
                         return response()->json(array(
                             'fails'     => false,
-                            'message'   => 'Tak tau salahnya'
+                            'message'   => 'email tidak diperbolehkan login'
                         ));
                     }
                 } else {

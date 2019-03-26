@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <title>Event Yogyakarta</title>
+        <title>Event Digital</title>
         <style>
           body { text-align: center; padding: 150px; }
           h1 { font-size: 50px; }

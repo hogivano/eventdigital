@@ -21,6 +21,14 @@ Route::post('daftar', 'SignUpController@signUp')->name('signup.submit');
 Route::get('l4s0k', 'LoginController@masukPage');
 Route::post('l4s0k', 'LoginController@login')->name('login.submit');
 
+// Password Reset Routes...
+Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
+Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
+Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
+Route::post('password/reset', 'Auth\ResetPasswordController@reset');
+
+Route::get('verify-user/{token}', 'SignUpController@verifyUser')->name('user.verify');
+
 Route::get('400', ['as'=>'400', 'ErrorHandlerController@show400']);
 Route::get('401', ['as'=>'401', 'ErrorHandlerController@show401']);
 Route::get('403', ['as'=>'403', 'ErrorHandlerController@show403']);
