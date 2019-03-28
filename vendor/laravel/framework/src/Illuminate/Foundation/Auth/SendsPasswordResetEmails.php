@@ -14,7 +14,7 @@ trait SendsPasswordResetEmails
      */
     public function showLinkRequestForm()
     {
-        return view('passwords.email');
+        return view('auth.passwords.email');
     }
 
     /**

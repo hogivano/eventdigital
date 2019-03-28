@@ -12,7 +12,7 @@ use Illuminate\Support\Str;
 
 class AdminController extends Controller {
     public function __construct(){
-
+        $this->middleware('auth:admin');
     }
 
     public function index(){
@@ -169,6 +169,10 @@ class AdminController extends Controller {
     public function artisEditShow($id){
         $artis = Artis::where('id', $id)->get();
         return view ('admin.artis.edit', compact('artis'));
+    }
+
+    public function endPointIndex(){
+        return view('admin.endpoint.index');
     }
 
     public function logout(){

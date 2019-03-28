@@ -78,7 +78,7 @@ class SignUpController extends Controller {
 
                 return response()->json(array(
                   'success' => true,
-                  'message' => 'Akun telah dibuat. Silahkan login',
+                  'message' => 'Akun telah dibuat. Silahkan cek email untuk login',
                 ));
           }
         }

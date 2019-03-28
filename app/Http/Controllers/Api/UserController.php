@@ -45,6 +45,12 @@ class UserController extends Controller{
 
         if (!empty($user)){
             if (Hash::check($request->password, $user->password)){
+                if ($user->confirmed == 0) {
+                    return response()->json([
+                        'error' => true,
+                        'message' => 'email belum terverifikasi'
+                    ]);
+                }
                 $user->makeHidden(["id", "created_at", "updated_at"]);
                 $user->makeVisible(['password', 'remember_token', 'auth_key']);
                 $user->error = false;
@@ -109,7 +115,7 @@ class UserController extends Controller{
         // ], 201);
 
         $valid = Validator::make($req->all(), [
-            'name'  => 'required|string',
+            'username'  => 'required|string|unique:users',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
         ]);
@@ -123,10 +129,11 @@ class UserController extends Controller{
             $email = $req->email;
             $password = bcrypt($req->password);
             $token = str_random(60);
+            $username = $req->username;
 
             if( count(Mail::failures()) > 0 ) {
               return response()->json(array(
-                'success' => false,
+                'error' => true,
                 'message' => 'Akun gagal dibuat. Silahkan coba lagi',
               ));
             }
@@ -140,16 +147,36 @@ class UserController extends Controller{
                 $user = User::create([
                       'name' => $req->name,
                       'email' => $email,
+                      'username' => $username,
                       'password'  => $password,
                       'role'      => 1,
                       'auth_key' => $token,
                 ]);
 
                 return response()->json(array(
-                  'success' => true,
-                  'message' => 'Akun telah dibuat. Silahkan login',
+                  'error' => false,
+                  'message' => 'Akun telah dibuat. Silahkan cek email untuk konfirmasi',
                 ));
             }
         }
+    }
+
+    public function checkProfile(Request $req){
+        $profile = ProfileUsers::where('id', $req->id)->first():
+        if ($profile){
+            return response()->json([
+                'error' => false,
+                'message' => 'profile user sudah ada'
+            ]);
+        } else {
+            return response()->json([
+                'error' => true,
+                'message' => 'tidak bisa ditambahkan silahkan coba lagi'
+            ]);
+        }
+    }
+
+    public function createProfile(Request $req){
+        
     }
 }

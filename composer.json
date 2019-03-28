@@ -12,7 +12,8 @@
         "laravel/passport": "~4.0",
         "laravel/tinker": "~1.0",
         "symfony/polyfill-iconv": "^1.7",
-        "tymon/jwt-auth": "1.0.0-rc.1"
+        "tymon/jwt-auth": "1.0.0-rc.1",
+        "nesbot/carbon" : "^1.26.0"
     },
     "require-dev": {
         "filp/whoops": "~2.0",

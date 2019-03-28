@@ -24,6 +24,9 @@ Route::group(['middleware' => ['jwt.auth']], function() {
     Route::get('login', function(){
         return response()->json("oke login eventdigital");
     });
+
+    Route::get('check-profile', 'Api\UserController@checkProfile');
+    Route::post('profile/new', 'Api\UserController@createProfile');
 });
 
 Route::get('artisid', 'ArtisController@artisId');

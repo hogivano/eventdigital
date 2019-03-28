@@ -48,5 +48,7 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('artis/edit/{id}', 'AdminController@artisEditShow')->name('artis.edit');
     Route::get('artis/delete/{id}', 'AdminController@artisDelete')->name('artis.delete');
 
+    Route::get('end-point', 'AdminController@endPointIndex')->name('admin.end-point');
+
     Route::get('logout', 'AdminController@logout')->name('admin.logout');
 });
