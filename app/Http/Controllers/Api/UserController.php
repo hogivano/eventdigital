@@ -54,7 +54,10 @@ class UserController extends Controller{
                 $user->makeHidden(["id", "created_at", "updated_at"]);
                 $user->makeVisible(['password', 'remember_token', 'auth_key']);
                 $user->error = false;
-                return response()->json(Crypt::encrypt($user));
+                return response()->json([
+                    'error' => false,
+                    'message' => Crypt::encrypt($user)
+                ]);
             } else {
                 return response()->json([
                     'error' => true,
@@ -162,7 +165,7 @@ class UserController extends Controller{
     }
 
     public function checkProfile(Request $req){
-        $profile = ProfileUsers::where('id', $req->id)->first():
+        $profile = ProfileUsers::where('id', $req->id)->first();
         if ($profile){
             return response()->json([
                 'error' => false,
@@ -177,6 +180,6 @@ class UserController extends Controller{
     }
 
     public function createProfile(Request $req){
-        
+
     }
 }
